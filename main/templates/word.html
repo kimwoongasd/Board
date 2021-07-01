@@ -1,0 +1,12 @@
+<h1>워드 카운트 결과!</h1>
+<br>
+<a href="{% url 'count' %}">워드 카운트</a>
+<br>
+<a href="{% url 'home' %}">홈으로</a>
+<br>
+{{fulltext}}
+<br>
+{% for word, countTotal in dictionary%}
+{{word}} - {{countTotal}}
+<br>
+{% endfor %}
