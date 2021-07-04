@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Blog
+from .forms import BlogUpdate
 
 # Create your views here.
 
@@ -44,14 +45,18 @@ def update(request, blog_id):
     blog = Blog.objects.get(pk=blog_id)
 
     if request.method == "POST":
-        blog.title = request.POST['title']
-        blog.body = request.POST['body']
-        blog.pub_date = timezone.datetime.now()
-        blog.save()
-        return redirect('/detail/' + str(blog_id))
+        form = BlogUpdate(request.POST)
+        if form.is_valid():
+            blog.title = request.POST['title']
+            blog.body = request.POST['body']
+            blog.pub_date = timezone.datetime.now()
+            blog.save()
+            return redirect('/detail/' + str(blog_id))
 
     else:
-        return render(request, 'update.html')
+        form = BlogUpdate(instance = blog)
+
+        return render(request, 'update.html', {'form': form})
 
 def delete(request, blog_id):
     blog = Blog.objects.get(pk=blog_id)
