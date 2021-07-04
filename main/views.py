@@ -52,3 +52,8 @@ def update(request, blog_id):
 
     else:
         return render(request, 'update.html')
+
+def delete(request, blog_id):
+    blog = Blog.objects.get(pk=blog_id)
+    blog.delete()
+    return redirect('/')
