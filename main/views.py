@@ -39,3 +39,16 @@ def postcreate(request):
     blog.pub_date = timezone.datetime.now()
     blog.save()
     return redirect('/detail/'+str(blog.id))
+
+def update(request, blog_id):
+    blog = Blog.objects.get(pk=blog_id)
+
+    if request.method == "POST":
+        blog.title = request.POST['title']
+        blog.body = request.POST['body']
+        blog.pub_date = timezone.datetime.now()
+        blog.save()
+        return redirect('/detail/' + str(blog_id))
+
+    else:
+        return render(request, 'update.html')
