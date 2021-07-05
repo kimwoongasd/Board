@@ -67,3 +67,15 @@ def delete(request, blog_id):
     blog = Blog.objects.get(pk=blog_id)
     blog.delete()
     return redirect('/')
+
+def search(request):
+    blogs = Blog.objects.all().order_by('-id')
+
+    q = request.POST.get('q', "")
+
+    if q:
+        blogs = blogs.filter(title__icontains=q)
+        return render(request, 'search.html', {'blogs': blogs, 'q': q})
+
+    else:
+        return render(request, 'search.html')
