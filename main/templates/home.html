@@ -5,7 +5,7 @@
     <a href="{% url 'count' %}">워드 카운트</a>
 
     <br>
-    {% for blog in blogs.all %}
+    {% for blog in posts %}
     <div class="container">
     <div class="card">
         <div class="card-body">
@@ -17,6 +17,20 @@
     </div>
     <br>
     {% endfor %}
+
+    {% if posts.has_previous %}
+    <a href="?page=1">처음으로</a>
+    <a href="?page={{posts.previous_page_number}}">이전</a>
+    {% endif %}
+
+    <span>{{posts.number}}</span>
+    <span>of</span>
+    <span>{{posts.paginator.num_pages}}</span>
+
+    {% if posts.has_next %}
+    <a href="?page={{posts.next_page_number}}">다음</a>
+    <a href="?page={{posts.paginator.num_pages}}">끝으로</a>
+    {% endif %}
 
 {% endblock %}
 
