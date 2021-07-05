@@ -42,9 +42,16 @@ def postcreate(request):
     blog = Blog()
     blog.title = request.POST['title']
     blog.body = request.POST['body']
-    blog.images = request.FILES['images']
     blog.pub_date = timezone.datetime.now()
     blog.save()
+
+    if not request.FILES:
+        blog.images = ""
+        blog.save()
+    else:
+        blog.images = request.FILES['images']
+        blog.save()
+
     return redirect('/detail/'+str(blog.id))
 
 def update(request, blog_id):
@@ -55,6 +62,7 @@ def update(request, blog_id):
         if form.is_valid():
             blog.title = request.POST['title']
             blog.body = request.POST['body']
+            blog.images = request.FILES['images']
             blog.pub_date = timezone.datetime.now()
             blog.save()
             return redirect('/detail/' + str(blog_id))
