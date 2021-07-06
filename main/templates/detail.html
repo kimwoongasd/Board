@@ -15,6 +15,16 @@
                 <br>
                 <a href="{% url 'update' blog.id %}"><img src="/static/update.png" alt="수정" width="30"></a>
                 <a href="{% url 'delete' blog.id %}"><img src="/static/delete.png" alt="삭제" width="30"></a>
+                <form method="POST" action="{% url 'newreply' blog.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{blog.id}}" name="blog">
+                    댓글 작성 : <input type="text" name="comment_body">
+                    <button type="submit" class="btn btn-secondary">작성</button>
+                </form>
+
+                {% for comment in blog.comments.all %}
+                <p> <span> {{user.username}} </span> : {{ comment.comment_body }} - {{comment.comment_date}}</p>
+                {% endfor %}
             </div>
         </div>
     </div>

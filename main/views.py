@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Blog
+from .models import Blog,Comment
 from .forms import BlogUpdate
 from django.core.paginator import Paginator
 
@@ -88,3 +88,11 @@ def search(request):
 
     else:
         return render(request, 'search.html')
+
+def newreply(request, blog_id):
+    if request.method == 'POST':
+        comment = Comment()
+        comment.comment_body = request.POST['comment_body']
+        comment.blog = Blog.objects.get(pk=blog_id)  # id로 객체 가져오기
+        comment.save()
+        return redirect('/detail/' + str(comment.blog.id))
