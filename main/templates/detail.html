@@ -12,9 +12,18 @@
                     <img src="{{blog.images.url}}" width="500" height="500">
                 {% endif %}
                 <br>
+                <a href="{% url 'likes' blog.id %}">
+                {% if user in blog.like.all %}
+                취소
+                {% else %}
+                좋아요
+                {% endif %}
+                </a>
                 <br>
+                {%if request.user == blog.user or request.user.is_staff %}
                 <a href="{% url 'update' blog.id %}"><img src="/static/update.png" alt="수정" width="30"></a>
                 <a href="{% url 'delete' blog.id %}"><img src="/static/delete.png" alt="삭제" width="30"></a>
+                {%endif%}
                 <form method="POST" action="{% url 'newreply' blog.id %}">
                     {% csrf_token %}
                     <input type="hidden" value="{{blog.id}}" name="blog">

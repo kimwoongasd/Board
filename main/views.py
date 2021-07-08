@@ -40,6 +40,7 @@ def create(request):
 
 def postcreate(request):
     blog = Blog()
+    blog.user = request.user
     blog.title = request.POST['title']
     blog.body = request.POST['body']
     blog.pub_date = timezone.datetime.now()
@@ -96,3 +97,15 @@ def newreply(request, blog_id):
         comment.blog = Blog.objects.get(pk=blog_id)  # id로 객체 가져오기
         comment.save()
         return redirect('/detail/' + str(comment.blog.id))
+
+def likes(request, blog_id):
+    like_b = get_object_or_404(Blog, id=blog_id)
+    if request.user in like_b.like.all():
+        like_b.like.remove(request.user)
+        like_b.like_count -= 1
+        like_b.save()
+    else:
+        like_b.like.add(request.user)
+        like_b.like_count += 1
+        like_b.save()
+    return redirect('/detail/' + str(blog_id))
